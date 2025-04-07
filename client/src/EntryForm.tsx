@@ -1,29 +1,56 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
-import type { Entry, UnsavedEntry } from './data';
+import {
+  readEntry,
+  updateEntry,
+  addEntry,
+  type Entry,
+  type UnsavedEntry,
+} from './data';
+import { useParams, useNavigate } from 'react-router-dom';
 
-type Props = {
-  entries: Entry[];
-  addEntry: (entry: UnsavedEntry) => Promise<void>;
-};
-
-export function Entries({ addEntry }: Props) {
+export function EntryForm() {
   const [title, setTitle] = useState('');
   const [photoUrl, setPhotoUrl] = useState('');
   const [notes, setNotes] = useState('');
+  const { entryId } = useParams();
+  const id = Number(entryId);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    async function load() {
+      const loaded = await readEntry(id);
+      if (!loaded) return;
+      setTitle(loaded.title);
+      setPhotoUrl(loaded.photoUrl);
+      setNotes(loaded.notes);
+    }
+    load();
+  }, [id]);
 
   async function handleSave(
     event: React.FormEvent<HTMLFormElement>
   ): Promise<void> {
     event?.preventDefault();
 
-    const newEntry: UnsavedEntry = {
-      title,
-      photoUrl,
-      notes,
-    };
+    if (entryId) {
+      const updatedEntry: Entry = {
+        title,
+        photoUrl,
+        notes,
+        entryId: id,
+      };
+      await updateEntry(updatedEntry);
+    } else {
+      const newEntry: UnsavedEntry = {
+        title,
+        photoUrl,
+        notes,
+      };
+      await addEntry(newEntry);
+    }
 
-    await addEntry(newEntry);
+    navigate('/modify');
   }
 
   return (
