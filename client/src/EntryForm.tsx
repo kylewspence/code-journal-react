@@ -4,6 +4,7 @@ import {
   readEntry,
   updateEntry,
   addEntry,
+  removeEntry,
   type Entry,
   type UnsavedEntry,
 } from './data';
@@ -53,6 +54,12 @@ export function EntryForm() {
     navigate('/modify');
   }
 
+  async function handleDelete(): Promise<void> {
+    if (!entryId) return;
+    await removeEntry(id);
+    navigate('/modify');
+  }
+
   return (
     <div className="entry-form-wrapper hidden">
       <form id="entry-form" onSubmit={handleSave}>
@@ -92,9 +99,15 @@ export function EntryForm() {
               value={notes}
               onChange={(e) => setNotes(e.target.value)}></textarea>
             <div className="form-actions">
-              <button className="delete-button hide" type="button">
-                Delete Entry
-              </button>
+              {entryId && (
+                <button
+                  className="delete-button hide"
+                  type="button"
+                  onClick={handleDelete}>
+                  Delete Entry
+                </button>
+              )}
+
               <button type="submit">Save</button>
             </div>
           </div>

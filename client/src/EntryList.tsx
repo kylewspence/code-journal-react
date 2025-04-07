@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { readEntries, Entry } from './data';
 
-export function Modify() {
+export function EntryList() {
   const navigate = useNavigate();
   const [entries, setEntries] = useState<Entry[]>([]);
 

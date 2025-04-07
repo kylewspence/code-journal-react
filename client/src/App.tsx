@@ -1,5 +1,5 @@
 import { Route, Routes } from 'react-router-dom';
-import { Modify } from './Modify';
+import { EntryList } from './EntryList';
 import { Header } from './Header';
 import { EntryForm } from './EntryForm';
 import './App.css';
@@ -14,7 +14,7 @@ function App() {
         <Route path="/" element={<Header />}>
           <Route index element={<EntryForm />} />
           <Route path="modify/:entryId" element={<EntryForm />} />
-          <Route path="modify" element={<Modify />} />
+          <Route path="modify" element={<EntryList />} />
         </Route>
       </Routes>
     </>
