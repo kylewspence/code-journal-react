@@ -1,10 +1,9 @@
-.hidden {
+/* .hidden {
   display: none !important;
 }
 
 .hide {
-  visibility: hidden !important;
-}
+  visibility: hidden !important; */
 
 .container {
   max-width: 575px;
@@ -35,4 +34,5 @@
   .column-half {
     width: 50%;
   }
+}
 }
