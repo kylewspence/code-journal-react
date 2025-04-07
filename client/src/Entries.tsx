@@ -1,8 +1,10 @@
 import { useState } from 'react';
-import { UnsavedEntry } from './data.ts';
+
+import type { Entry, UnsavedEntry } from './data';
 
 type Props = {
-  addEntry: (entry: UnsavedEntry) => void;
+  entries: Entry[];
+  addEntry: (entry: UnsavedEntry) => Promise<void>;
 };
 
 export function Entries({ addEntry }: Props) {

@@ -7,7 +7,7 @@ import './css/layout.css';
 import './css/reset.css';
 import './css/styles.css';
 import { useEffect, useState } from 'react';
-import { readEntries, addEntry } from './data';
+import { readEntries, addEntry, removeEntry, updateEntry } from './data';
 import type { Entry, UnsavedEntry } from './data';
 
 function App() {
@@ -17,13 +17,28 @@ function App() {
   });
 
   useEffect(() => {
-    const loaded = readEntries();
-    setEntries(loaded);
+    async function load() {
+      const loaded = await readEntries();
+      setEntries(loaded);
+    }
+    load();
   }, []);
 
-  function handleAddEntry(newEntry: UnsavedEntry) {
-    const added = addEntry(newEntry); // data.ts adds entryId + saves
-    setEntries([added, ...entries]); // update state so React knows!
+  async function handleAddEntry(newEntry: UnsavedEntry) {
+    const added = await addEntry(newEntry);
+    setEntries((prev) => [added, ...prev]);
+  }
+
+  async function handleUpdateEntry(updatedEntry: Entry) {
+    const updated = await updateEntry(updatedEntry);
+    setEntries((prev) =>
+      prev.map((e) => (e.entryId === updated.entryId ? updated : e))
+    );
+  }
+
+  async function handleRemoveEntry(entryId: number) {
+    await removeEntry(entryId);
+    setEntries((prev) => prev.filter((e) => e.entryId !== entryId));
   }
 
   return (
@@ -34,7 +49,16 @@ function App() {
             index
             element={<Entries entries={entries} addEntry={handleAddEntry} />}
           />
-          <Route path="modify/:entryId" element={<Modify />} />
+          <Route
+            path="modify/:entryId"
+            element={
+              <Modify
+                entries={entries}
+                onUpdate={handleUpdateEntry}
+                onDelete={handleRemoveEntry}
+              />
+            }
+          />
           {/* <Route path="*" /> */}
         </Route>
       </Routes>
