@@ -4,13 +4,9 @@ export function Header() {
     <div>
       <nav className="px-4 text-white bg-gray-900">
         <ul>
+          <li className="inline-block py-2 px-4">Code Journal</li>
           <li className="inline-block py-2 px-4">
-            <Link to="/" className="text-white">
-              Code Journal
-            </Link>
-          </li>
-          <li className="inline-block py-2 px-4">
-            <Link to="/" className="text-white">
+            <Link to="modify/1" className="text-white">
               Entries
             </Link>
           </li>
